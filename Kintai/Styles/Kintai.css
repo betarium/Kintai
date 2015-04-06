@@ -1,0 +1,27 @@
+﻿.info
+{
+    border: 1px solid black;
+    padding: 10px 10px 10px 10px;
+    margin: 10px 0px 10px 0px;
+    font-weight: bold;
+}
+
+.info0
+{
+    display: none;
+}
+
+.week0
+{
+    color: Red;
+}
+
+.week6
+{
+    color: Red;
+}
+
+h2
+{
+    margin: 10px 0px 10px 0px;
+}

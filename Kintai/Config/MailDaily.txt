@@ -1,0 +1,17 @@
+[subject]
+%WorkDate% 作業報告 %UserName%
+
+[message]
+◆◆◆◆　作業報告　◆◆◆◆
+
+■■　作業時間　■■
+
+開始時刻　%BeginTime%
+終了時刻　%EndTime%
+休憩時間　%RestTime%
+労働時間　%WorkTime%
+
+■■　作業内容　■■
+
+%WorkDetail%
+

@@ -1,0 +1,2 @@
+"C:\Windows\Microsoft.NET\Framework\v4.0.30319\aspnet_regsql.exe" -sqlexportonly c:\temp\aspnetdb.sql -A all
+
