@@ -205,5 +205,10 @@ namespace Kintai.Work
             Response.Redirect("/Work/Edit.aspx?workDate=" + TargetDate2.AddDays(1).ToString(Utility.DATE_FORMAT_YYYYMMDD), false);
         }
 
+        protected void EndTimeInput_Click(object sender, EventArgs e)
+        {
+            EndTime.Text = DateTime.Now.ToString("HH:mm");
+        }
+
     }
 }

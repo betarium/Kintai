@@ -46,6 +46,12 @@
             ValidationExpression="[\d]+:[\d]+"><span class="failureNotification">00:00形式で入力してください。</span></asp:RegularExpressionValidator>
     </div>
     <div>
+        <asp:Label ID="Label7" runat="server" Text="" Width="5em"></asp:Label>
+        <small>
+            <asp:LinkButton ID="EndTimeInput" runat="server" 
+            onclick="EndTimeInput_Click">(現在時刻を入力)</asp:LinkButton></small>
+    </div>
+    <div>
         <br />
     </div>
     <div>
@@ -87,6 +93,7 @@
                     var rest2 = rest.split(":");
                     min -= parseInt(rest2[0], 10) * 60 + parseInt(rest2[1], 10);
                 }
+                min = Math.max(min, 0);
                 val = Math.floor(min / 60).toString() + ":" + ("00" + (min % 60).toString()).substr(-2);
             }
             $("#WorkTime").text(val);
