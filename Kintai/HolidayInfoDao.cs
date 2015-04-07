@@ -13,17 +13,16 @@ namespace Kintai
         public static class COLUMN_LIST
         {
             #region Columns
-            public const string HolidayDate = "HolidayDate";
-            public const string HolidayType = "HolidayType";
+            public const string Holiday = "Holiday";
             public const string HolidayName = "HolidayName";
-            public const string CreateTimestamp = "CreateTimestamp";
-            public const string CreateUserId = "CreateUserId";
-            public const string UpdateTimestamp = "UpdateTimestamp";
-            public const string UpdateUserId = "UpdateUserId";
+            //”ÍˆÍŽw’è‚Ì‚½‚ß’Ç‰Á
+            public const string Holiday1 = "Holiday1";
+            public const string Holiday2 = "Holiday2";
             #endregion
         }
 
-        public const string SQL_SELECT_PRIMARY_KEY = "select HolidayDate,HolidayType,HolidayName,CreateTimestamp,CreateUserId,UpdateTimestamp,UpdateUserId from HolidayInfo where HolidayDate = @HolidayDate";
+        public const string SQL_SELECT_PRIMARY_KEY = "select Holiday, HolidayName from HolidayInfo where Holiday = @Holiday";
+        public const string SQL_SELECT_PRIMARY_KEY2 = "select Holiday, HolidayName from HolidayInfo where Holiday >= @Holiday1 AND Holiday <= @Holiday2 ";
         public const string SQL_INSERT = "insert into HolidayInfo(HolidayDate,HolidayType,HolidayName,CreateTimestamp,CreateUserId,UpdateTimestamp,UpdateUserId)values(@HolidayDate,@HolidayType,@HolidayName,@CreateTimestamp,@CreateUserId,@UpdateTimestamp,@UpdateUserId)";
         public const string SQL_UPDATE_PRIMARY_KEY = "update HolidayInfo set HolidayType=@HolidayType,HolidayName=@HolidayName,CreateTimestamp=@CreateTimestamp,CreateUserId=@CreateUserId,UpdateTimestamp=@UpdateTimestamp,UpdateUserId=@UpdateUserId where HolidayDate = @HolidayDate";
         public const string SQL_DELETE_PRIMARY_KEY = "delete from HolidayInfo where HolidayDate = @HolidayDate";
@@ -74,6 +73,43 @@ namespace Kintai
             return record2;
         }
 
+        //”ÍˆÍÝ’è‚µ‚½ŒŸõ
+        public List<HolidayInfoEntity> SelectRange(HolidayInfoEntity filter)
+        {
+            Dictionary<string, object> param = FillPrimaryKey(filter);
+
+            SqlConnection conn = GetConnection();
+
+            SqlCommand command = conn.CreateCommand();
+            command.CommandText = SQL_SELECT_PRIMARY_KEY2;
+            if (param != null)
+            {
+                foreach (var key in param.Keys)
+                {
+                    command.Parameters.AddWithValue("@" + key, param[key]);
+                }
+            }
+
+            List<Dictionary<string, object>> list = Access.Select(conn, SQL_SELECT_PRIMARY_KEY2, param);
+            if (list.Count == 0)
+            {
+                return null;
+            }
+
+            List<HolidayInfoEntity> record2 = new List<HolidayInfoEntity>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                var record3 = FillEntyty(list[i]);
+                record2.Add(record3);
+            }
+
+
+            //HolidayInfoEntity record2 = FillEntyty(list[0]);
+            //record2 = FillEntyty(list[1]);
+
+            return record2;
+        }
+
         public List<HolidayInfoEntity> SelectWhere(string sql, Dictionary<string, object> param)
         {
             SqlConnection conn = GetConnection();
@@ -118,7 +154,9 @@ namespace Kintai
             Dictionary<string, object> param = new Dictionary<string, object>();
 
             #region PrimaryKeySet
-            param[COLUMN_LIST.HolidayDate] = filter.HolidayDate;
+            //param[COLUMN_LIST.Holiday] = filter.Holiday;
+            param[COLUMN_LIST.Holiday1] = filter.Holiday1;
+            param[COLUMN_LIST.Holiday2] = filter.Holiday2;
             #endregion
 
             return param;
@@ -129,13 +167,8 @@ namespace Kintai
             Dictionary<string, object> param = new Dictionary<string, object>();
 
             #region ParamSet
-            param[COLUMN_LIST.HolidayDate] = filter.HolidayDate;
-            param[COLUMN_LIST.HolidayType] = filter.HolidayType;
+            param[COLUMN_LIST.Holiday] = filter.Holiday;
             param[COLUMN_LIST.HolidayName] = filter.HolidayName;
-            param[COLUMN_LIST.CreateTimestamp] = filter.CreateTimestamp;
-            param[COLUMN_LIST.CreateUserId] = filter.CreateUserId;
-            param[COLUMN_LIST.UpdateTimestamp] = filter.UpdateTimestamp;
-            param[COLUMN_LIST.UpdateUserId] = filter.UpdateUserId;
             #endregion
 
             return param;
@@ -146,13 +179,17 @@ namespace Kintai
             HolidayInfoEntity record2 = new HolidayInfoEntity();
 
             #region EntytySet
-            record2.HolidayDate = (DateTime?)record[COLUMN_LIST.HolidayDate];
-            record2.HolidayType = (int?)record[COLUMN_LIST.HolidayType];
+            record2.Holiday = (DateTime?)record[COLUMN_LIST.Holiday];
             record2.HolidayName = (string)record[COLUMN_LIST.HolidayName];
-            record2.CreateTimestamp = (DateTime?)record[COLUMN_LIST.CreateTimestamp];
-            record2.CreateUserId = (string)record[COLUMN_LIST.CreateUserId];
-            record2.UpdateTimestamp = (DateTime?)record[COLUMN_LIST.UpdateTimestamp];
-            record2.UpdateUserId = (string)record[COLUMN_LIST.UpdateUserId];
+            //record2.HolidayName = (string)record[COLUMN_LIST.HolidayName];
+            //record2.CreateTimestamp = (DateTime?)record[COLUMN_LIST.CreateTimestamp];
+            //record2.CreateUserId = (string)record[COLUMN_LIST.CreateUserId];
+            //record2.UpdateTimestamp = (DateTime?)record[COLUMN_LIST.UpdateTimestamp];
+            //record2.UpdateUserId = (string)record[COLUMN_LIST.UpdateUserId];
+            //”ÍˆÍŽw’è‚Ì‚½‚ß’Ç‰Á
+            //record2.Holiday1 = (DateTime?)record[COLUMN_LIST.Holiday1];
+            //record2.Holiday2 = (DateTime?)record[COLUMN_LIST.Holiday2];
+
             #endregion
 
             return record2;
