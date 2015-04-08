@@ -91,10 +91,10 @@ namespace Kintai
             }
 
             List<Dictionary<string, object>> list = Access.Select(conn, SQL_SELECT_PRIMARY_KEY2, param);
-            if (list.Count == 0)
-            {
-                return null;
-            }
+            //if (list.Count == 0)
+            //{
+            //    return null;
+            //}
 
             List<HolidayInfoEntity> record2 = new List<HolidayInfoEntity>();
             for (int i = 0; i < list.Count; i++)
