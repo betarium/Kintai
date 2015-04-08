@@ -210,5 +210,15 @@ namespace Kintai.Work
             EndTime.Text = DateTime.Now.ToString("HH:mm");
         }
 
+        protected void RestTime1Link_Click(object sender, EventArgs e)
+        {
+            RestTime.Text = "01:00";
+        }
+
+        protected void BeginTimeInput_Click(object sender, EventArgs e)
+        {
+            BeginTime.Text = DateTime.Now.ToString("HH:mm");
+        }
+
     }
 }

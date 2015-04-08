@@ -38,18 +38,22 @@
         <asp:TextBox ID="BeginTime" runat="server" MaxLength="5" ClientIDMode="Static"></asp:TextBox>
         <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="BeginTime"
             ValidationExpression="[\d]+:[\d]+"><span class="failureNotification">00:00形式で入力してください。</span></asp:RegularExpressionValidator>
+        <div>
+            <asp:Label ID="Label8" runat="server" Text="" Width="4em"></asp:Label>
+            <small>
+                <asp:LinkButton ID="BeginTimeInput" runat="server" OnClick="BeginTimeInput_Click">(現在時刻を入力)</asp:LinkButton></small>
+        </div>
     </div>
     <div>
         <asp:Label ID="Label2" runat="server" Text="終了時刻"></asp:Label>
         <asp:TextBox ID="EndTime" runat="server" MaxLength="5" ClientIDMode="Static"></asp:TextBox>
         <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="EndTime"
             ValidationExpression="[\d]+:[\d]+"><span class="failureNotification">00:00形式で入力してください。</span></asp:RegularExpressionValidator>
-    </div>
-    <div>
-        <asp:Label ID="Label7" runat="server" Text="" Width="5em"></asp:Label>
-        <small>
-            <asp:LinkButton ID="EndTimeInput" runat="server" 
-            onclick="EndTimeInput_Click">(現在時刻を入力)</asp:LinkButton></small>
+        <div>
+            <asp:Label ID="Label7" runat="server" Text="" Width="4em"></asp:Label>
+            <small>
+                <asp:LinkButton ID="EndTimeInput" runat="server" OnClick="EndTimeInput_Click">(現在時刻を入力)</asp:LinkButton></small>
+        </div>
     </div>
     <div>
         <br />
@@ -59,6 +63,11 @@
         <asp:TextBox ID="RestTime" runat="server" MaxLength="5" ClientIDMode="Static"></asp:TextBox>
         <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="RestTime"
             ValidationExpression="[\d]+:[\d]+"><span class="failureNotification">00:00形式で入力してください。</span></asp:RegularExpressionValidator>
+        <div>
+            <asp:Label ID="Label9" runat="server" Text="" Width="4em"></asp:Label>
+            <small>
+                <asp:LinkButton ID="RestTime1Link" runat="server" OnClick="RestTime1Link_Click">(1:00)</asp:LinkButton></small>
+        </div>
     </div>
     <div>
         <br />
