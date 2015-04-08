@@ -8,11 +8,13 @@ using System.Web.Security;
 using System.Text.RegularExpressions;
 using OfficeOpenXml;
 using System.IO;
+using System.Data.SqlClient;
 
 namespace Kintai.Work
 {
     public partial class Month : System.Web.UI.Page
     {
+        public Dictionary<DateTime?, string> holidayMap = new Dictionary<DateTime?, string>();
         protected DateTime TargetMonthDate { get; set; }
 
         protected List<WorkTimeEntity> WorkTimeList { get; set; }
@@ -153,11 +155,34 @@ namespace Kintai.Work
             TotalRestTime2.Text = Utility.MinutesToTimeString(totalRestTime);
             TotalOverTime2.Text = Utility.MinutesToTimeString(Math.Max(totalWorkTime - (8 * 60 * workDay), 0));
 
+#region 祝日抽出
+            SqlConnection conn;
+            conn = ThreadConnectionHolder.GetConnection();
+            HolidayInfoDao dao2 = new HolidayInfoDao(conn);
+            HolidayInfoEntity entity = new HolidayInfoEntity();
+            entity.Holiday1 = new DateTime(TargetMonthDate.Year, TargetMonthDate.Month, TargetMonthDate.Day);
+            DateTime TargetMonthEnd = TargetMonthDate.AddMonths(1).AddDays(-1);
+            entity.Holiday2 = new DateTime(TargetMonthEnd.Year, TargetMonthEnd.Month, TargetMonthEnd.Day);
+            List<HolidayInfoEntity> HolidayInRange = dao2.SelectRange(entity);
+
+            foreach (var item in HolidayInRange)
+            {
+                holidayMap.Add(item.Holiday, item.HolidayName);
+            }
+            
+#endregion
             WorkTimeList = dayList;
 
             TargetMonthHead.Text = TargetMonthDate.ToString("yyyy年MM月");
             DateList.DataSource = WorkTimeList;
             DateList.DataBind();
+        }
+
+        public int isHoliday(DateTime d)
+        {
+            bool b = holidayMap.ContainsKey(d);
+            int result = Convert.ToInt32(b);
+            return result;
         }
 
         protected void Page_Load(object sender, EventArgs e)

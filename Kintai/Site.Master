@@ -30,6 +30,7 @@
                         </span>[
                         <asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutAction="Redirect" LogoutText="ログアウト"
                             LogoutPageUrl="~/" />
+
                         ]
                     </LoggedInTemplate>
                 </asp:LoginView>

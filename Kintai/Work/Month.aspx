@@ -46,7 +46,7 @@
             <asp:Repeater ID="DateList" runat="server">
                 <ItemTemplate>
                     <tr>
-                        <td class="week<%# (int)((Kintai.WorkTimeEntity)Container.DataItem).WorkDate.Value.DayOfWeek %>">
+                        <td class="week<%# (int)((Kintai.WorkTimeEntity)Container.DataItem).WorkDate.Value.DayOfWeek %> holiday<%# isHoliday(((Kintai.WorkTimeEntity)Container.DataItem).WorkDate.Value) %>">
                             <%# ((Kintai.WorkTimeEntity)Container.DataItem).WorkDate.Value.ToString("d(ddd)")%>
                         </td>
                         <td>
