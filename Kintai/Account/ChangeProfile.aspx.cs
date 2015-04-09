@@ -13,5 +13,11 @@ namespace Kintai.Account
         {
 
         }
+
+        protected void SaveButton_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine(TextBox1.Text);
+        }
+      
     }
 }
