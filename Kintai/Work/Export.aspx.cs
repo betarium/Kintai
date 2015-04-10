@@ -144,9 +144,9 @@ namespace Kintai.Work
                 excel.Workbook.Worksheets[1].Cells[9 + index, 4].Value = Utility.WorkTypeToString(entity.WorkType, true);
                 excel.Workbook.Worksheets[1].Cells[9 + index, 5].Value = Utility.MinutesToTimeString(entity.BeginTime);
                 excel.Workbook.Worksheets[1].Cells[9 + index, 6].Value = Utility.MinutesToTimeString(entity.EndTime);
-                excel.Workbook.Worksheets[1].Cells[9 + index, 5].Value = new TimeSpan(0, (int)entity.BeginTime, 0);
-                excel.Workbook.Worksheets[1].Cells[9 + index, 6].Value = new TimeSpan(0, (int)entity.EndTime, 0);
-                excel.Workbook.Worksheets[1].Cells[9 + index, 8].Value = new TimeSpan(0, (int)entity.RestTime, 0);
+                excel.Workbook.Worksheets[1].Cells[9 + index, 5].Value = new TimeSpan(0, (int)(entity.BeginTime ?? 0), 0);
+                excel.Workbook.Worksheets[1].Cells[9 + index, 6].Value = new TimeSpan(0, (int)(entity.EndTime ?? 0), 0);
+                excel.Workbook.Worksheets[1].Cells[9 + index, 8].Value = new TimeSpan(0, (int)(entity.RestTime ?? 0), 0);
             }
 
             excel.Workbook.Worksheets[1].Cells[42, 5].Value = workDay;

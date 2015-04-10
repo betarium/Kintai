@@ -1,11 +1,11 @@
-﻿<%@ Page Title="帳票出力" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"
+﻿<%@ Page Title="帳票" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"
     CodeBehind="Export.aspx.cs" Inherits="Kintai.Work.Export" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <h2>
-        帳票出力
+        帳票
         <asp:Label ID="TargetMonthHead" runat="server" Text="" />
     </h2>
     <br />
@@ -20,6 +20,6 @@
         <asp:LinkButton ID="DownloadLink" runat="server" OnClick="DownloadLink_Click">ダウンロード</asp:LinkButton>
     </div>
     <div>
-        <asp:Button ID="ReportButton" runat="server" Text="帳票の保存" OnClick="ReportButton_Click" />
+        <asp:Button ID="ReportButton" runat="server" Text="Excel出力" OnClick="ReportButton_Click" />
     </div>
 </asp:Content>

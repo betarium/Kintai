@@ -11,13 +11,21 @@ namespace Kintai.Account
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack)
+            {
+                FullName.Text = (string)HttpContext.Current.Profile.GetPropertyValue("FullName");
+            }
         }
 
         protected void SaveButton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine(TextBox1.Text);
+            if (string.IsNullOrEmpty(FullName.Text))
+            {
+                throw new ArgumentNullException("FullName");
+            }
+            HttpContext.Current.Profile.SetPropertyValue("FullName", FullName.Text);
+            InfoMessage.Text = "保存しました。";
         }
-      
+
     }
 }

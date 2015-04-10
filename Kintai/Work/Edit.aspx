@@ -83,7 +83,7 @@
         <asp:Label ID="Label4" runat="server" Text="業務内容" Style="vertical-align: top"></asp:Label>
         <asp:TextBox ID="WorkDetail" runat="server" Rows="10" Columns="40" TextMode="MultiLine"></asp:TextBox>
     </div>
-    <div style="text-align: right">
+    <div style="text-align: right; width: 600px">
         <asp:Button ID="SaveButton" runat="server" Text="保存" OnClick="SaveButton_Click" />
         <asp:Button ID="MailButton" runat="server" Text="メール送信" OnClick="MailButton_Click" />
     </div>
