@@ -92,6 +92,8 @@
     </Content>
     <Content Include="Work\Edit.aspx" />
     <Content Include="Work\Export.aspx" />
+    <Content Include="Work\HolidayList.aspx" />
+    <Content Include="Work\HolidayRegister.aspx" />
     <Content Include="Work\Month.aspx" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +175,20 @@
     </Compile>
     <Compile Include="Work\Export.aspx.designer.cs">
       <DependentUpon>Export.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Work\HolidayList.aspx.cs">
+      <DependentUpon>HolidayList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Work\HolidayList.aspx.designer.cs">
+      <DependentUpon>HolidayList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Work\HolidayRegister.aspx.cs">
+      <DependentUpon>HolidayRegister.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Work\HolidayRegister.aspx.designer.cs">
+      <DependentUpon>HolidayRegister.aspx</DependentUpon>
     </Compile>
     <Compile Include="Work\Month.aspx.cs">
       <DependentUpon>Month.aspx</DependentUpon>

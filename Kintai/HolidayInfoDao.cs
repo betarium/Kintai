@@ -23,8 +23,11 @@ namespace Kintai
 
         public const string SQL_SELECT_PRIMARY_KEY = "select Holiday, HolidayName from HolidayInfo where Holiday = @Holiday";
         public const string SQL_SELECT_PRIMARY_KEY2 = "select Holiday, HolidayName from HolidayInfo where Holiday >= @Holiday1 AND Holiday <= @Holiday2 ";
-        public const string SQL_INSERT = "insert into HolidayInfo(HolidayDate,HolidayType,HolidayName,CreateTimestamp,CreateUserId,UpdateTimestamp,UpdateUserId)values(@HolidayDate,@HolidayType,@HolidayName,@CreateTimestamp,@CreateUserId,@UpdateTimestamp,@UpdateUserId)";
-        public const string SQL_UPDATE_PRIMARY_KEY = "update HolidayInfo set HolidayType=@HolidayType,HolidayName=@HolidayName,CreateTimestamp=@CreateTimestamp,CreateUserId=@CreateUserId,UpdateTimestamp=@UpdateTimestamp,UpdateUserId=@UpdateUserId where HolidayDate = @HolidayDate";
+        public const string SQL_SELECT_ALL = "select Holiday, HolidayName from HolidayInfo";
+        public const string SQL_INSERT = "insert into HolidayInfo(Holiday, HolidayName)values(@Holiday,@HolidayName)";
+        public const string SQL_INSERT_OLD = "insert into HolidayInfo(HolidayDate,HolidayType,HolidayName,CreateTimestamp,CreateUserId,UpdateTimestamp,UpdateUserId)values(@HolidayDate,@HolidayType,@HolidayName,@CreateTimestamp,@CreateUserId,@UpdateTimestamp,@UpdateUserId)";
+        public const string SQL_UPDATE_PRIMARY_KEY = "update HolidayInfo set Holiday=@Holiday,HolidayName=@HolidayName where Holiday = @Holiday";
+        public const string SQL_UPDATE_PRIMARY_KEY_OLD = "update HolidayInfo set HolidayType=@HolidayType,HolidayName=@HolidayName,CreateTimestamp=@CreateTimestamp,CreateUserId=@CreateUserId,UpdateTimestamp=@UpdateTimestamp,UpdateUserId=@UpdateUserId where HolidayDate = @HolidayDate";
         public const string SQL_DELETE_PRIMARY_KEY = "delete from HolidayInfo where HolidayDate = @HolidayDate";
 
         public virtual DatabaseAccess Access { get; set; }
@@ -110,6 +113,43 @@ namespace Kintai
             return record2;
         }
 
+        //j“ú‘SŒ’Šo
+        public List<HolidayInfoEntity> SelectAll(HolidayInfoEntity filter)
+        {
+            Dictionary<string, object> param = FillPrimaryKey(filter);
+
+            SqlConnection conn = GetConnection();
+
+            SqlCommand command = conn.CreateCommand();
+            command.CommandText = SQL_SELECT_ALL;
+            if (param != null)
+            {
+                foreach (var key in param.Keys)
+                {
+                    command.Parameters.AddWithValue("@" + key, param[key]);
+                }
+            }
+
+            List<Dictionary<string, object>> list = Access.Select(conn, SQL_SELECT_PRIMARY_KEY2, param);
+            //if (list.Count == 0)
+            //{
+            //    return null;
+            //}
+
+            List<HolidayInfoEntity> record2 = new List<HolidayInfoEntity>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                var record3 = FillEntyty(list[i]);
+                record2.Add(record3);
+            }
+
+
+            //HolidayInfoEntity record2 = FillEntyty(list[0]);
+            //record2 = FillEntyty(list[1]);
+
+            return record2;
+        }
+
         public List<HolidayInfoEntity> SelectWhere(string sql, Dictionary<string, object> param)
         {
             SqlConnection conn = GetConnection();
@@ -154,9 +194,18 @@ namespace Kintai
             Dictionary<string, object> param = new Dictionary<string, object>();
 
             #region PrimaryKeySet
-            //param[COLUMN_LIST.Holiday] = filter.Holiday;
-            param[COLUMN_LIST.Holiday1] = filter.Holiday1;
-            param[COLUMN_LIST.Holiday2] = filter.Holiday2;
+            if (filter.Holiday != null)
+            {
+                param[COLUMN_LIST.Holiday] = filter.Holiday;
+            }
+            if (filter.Holiday1 != null)
+            {
+                param[COLUMN_LIST.Holiday1] = filter.Holiday1;
+            }
+            if (filter.Holiday2 != null)
+            {
+                param[COLUMN_LIST.Holiday2] = filter.Holiday2;
+            }
             #endregion
 
             return param;
