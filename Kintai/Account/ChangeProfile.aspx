@@ -1,4 +1,4 @@
-﻿<%@ Page Title="プロファイル" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"
+﻿<%@ Page Title="プロフィール" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"
     CodeBehind="ChangeProfile.aspx.cs" Inherits="Kintai.Account.ChangeProfile" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
@@ -10,7 +10,7 @@
     <div class="info<%: InfoMessage.Text != ""? "": "0" %>">
         <asp:Literal ID="InfoMessage" runat="server"></asp:Literal>
     </div>
-    <h3>プロファイル変更</h3>
+    <h3>プロフィール変更</h3>
     <asp:Label runat="server" AssociatedControlID="FullName">氏名</asp:Label>
     <asp:TextBox ID="FullName" runat="server"></asp:TextBox>
     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ControlToValidate="FullName"

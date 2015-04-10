@@ -28,7 +28,7 @@
                     <LoggedInTemplate>
                         ログイン中：<span class="bold"><asp:LoginName ID="HeadLoginName" runat="server" />
                         </span>[
-                        <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/Account/ChangeProfile.aspx">プロファイル</asp:HyperLink>
+                        <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/Account/ChangeProfile.aspx">プロフィール</asp:HyperLink>
                         ] [
                         <asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutAction="Redirect" LogoutText="ログアウト"
                             LogoutPageUrl="~/" />
