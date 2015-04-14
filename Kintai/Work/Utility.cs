@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Data.SqlClient;
 
 namespace Kintai.Work
 {
@@ -143,5 +144,56 @@ namespace Kintai.Work
             }
             return null;
         }
+
+        public static Dictionary<DateTime, HolidayInfoEntity> GetHoliday(DateTime targetMonth)
+        {
+            SqlConnection conn = ThreadConnectionHolder.GetConnection();
+            HolidayInfoDao dao2 = new HolidayInfoDao(conn);
+            HolidayInfoEntity holidayEntity = new HolidayInfoEntity();
+            holidayEntity.Holiday1 = targetMonth.Date;
+            holidayEntity.Holiday2 = targetMonth.AddMonths(1).AddDays(-1);
+            List<HolidayInfoEntity> HolidayInRange = dao2.SelectRange(holidayEntity);
+            Dictionary<DateTime, HolidayInfoEntity> holidayMap = new Dictionary<DateTime, HolidayInfoEntity>();
+            foreach (var item in HolidayInRange)
+            {
+                holidayMap.Add(item.Holiday.Value, item);
+            }
+            return holidayMap;
+        }
+
+        public static void FixedMonthlyList(List<WorkTimeEntity> list, DateTime startDate)
+        {
+            Dictionary<string, WorkTimeEntity> dataMap = new Dictionary<string, WorkTimeEntity>();
+            foreach (var item in list)
+            {
+                string key = item.WorkDate.Value.ToString(Utility.DATE_FORMAT_YYYYMMDD);
+                if (dataMap.ContainsKey(key))
+                {
+                    continue;
+                }
+                dataMap.Add(key, item);
+            }
+
+            List<WorkTimeEntity> dayList = new List<WorkTimeEntity>();
+            for (int day = 1; day <= 31; day++)
+            {
+                DateTime newday = startDate.AddDays(day - 1);
+                if (newday.Month != startDate.Month)
+                {
+                    break;
+                }
+                WorkTimeEntity entity = new WorkTimeEntity();
+                var newymd = newday.ToString(Utility.DATE_FORMAT_YYYYMMDD);
+                if (dataMap.ContainsKey(newymd))
+                {
+                    entity = dataMap[newymd];
+                }
+                entity.WorkDate = newday;
+                dayList.Add(entity);
+            }
+            list.Clear();
+            list.AddRange(dayList);
+        }
+
     }
 }

@@ -17,7 +17,7 @@
         </span>
     </div>
     <h2>
-        <span class="week<%: (int)TargetDate2.DayOfWeek %>">
+        <span class="week<%: (int)TargetDate2.DayOfWeek %> holiday<%: isHoliday(TargetDate2) %>">
             <asp:Label ID="TargetDate" runat="server" />
         </span>
     </h2>

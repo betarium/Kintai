@@ -14,7 +14,7 @@ namespace Kintai.Work
 {
     public partial class Month : System.Web.UI.Page
     {
-        public Dictionary<DateTime?, string> holidayMap = new Dictionary<DateTime?, string>();
+        public Dictionary<DateTime, HolidayInfoEntity> holidayMap = new Dictionary<DateTime, HolidayInfoEntity>();
         protected DateTime TargetMonthDate { get; set; }
 
         protected List<WorkTimeEntity> WorkTimeList { get; set; }
@@ -39,39 +39,39 @@ namespace Kintai.Work
             }
         }
 
-        protected static void FixedMonthlyList(List<WorkTimeEntity> list, DateTime startDate)
-        {
-            Dictionary<string, WorkTimeEntity> dataMap = new Dictionary<string, WorkTimeEntity>();
-            foreach (var item in list)
-            {
-                string key = item.WorkDate.Value.ToString(Utility.DATE_FORMAT_YYYYMMDD);
-                if (dataMap.ContainsKey(key))
-                {
-                    continue;
-                }
-                dataMap.Add(key, item);
-            }
+        //protected static void FixedMonthlyList(List<WorkTimeEntity> list, DateTime startDate)
+        //{
+        //    Dictionary<string, WorkTimeEntity> dataMap = new Dictionary<string, WorkTimeEntity>();
+        //    foreach (var item in list)
+        //    {
+        //        string key = item.WorkDate.Value.ToString(Utility.DATE_FORMAT_YYYYMMDD);
+        //        if (dataMap.ContainsKey(key))
+        //        {
+        //            continue;
+        //        }
+        //        dataMap.Add(key, item);
+        //    }
 
-            List<WorkTimeEntity> dayList = new List<WorkTimeEntity>();
-            for (int day = 1; day <= 31; day++)
-            {
-                DateTime newday = startDate.AddDays(day - 1);
-                if (newday.Month != startDate.Month)
-                {
-                    break;
-                }
-                WorkTimeEntity entity = new WorkTimeEntity();
-                var newymd = newday.ToString(Utility.DATE_FORMAT_YYYYMMDD);
-                if (dataMap.ContainsKey(newymd))
-                {
-                    entity = dataMap[newymd];
-                }
-                entity.WorkDate = newday;
-                dayList.Add(entity);
-            }
-            list.Clear();
-            list.AddRange(dayList);
-        }
+        //    List<WorkTimeEntity> dayList = new List<WorkTimeEntity>();
+        //    for (int day = 1; day <= 31; day++)
+        //    {
+        //        DateTime newday = startDate.AddDays(day - 1);
+        //        if (newday.Month != startDate.Month)
+        //        {
+        //            break;
+        //        }
+        //        WorkTimeEntity entity = new WorkTimeEntity();
+        //        var newymd = newday.ToString(Utility.DATE_FORMAT_YYYYMMDD);
+        //        if (dataMap.ContainsKey(newymd))
+        //        {
+        //            entity = dataMap[newymd];
+        //        }
+        //        entity.WorkDate = newday;
+        //        dayList.Add(entity);
+        //    }
+        //    list.Clear();
+        //    list.AddRange(dayList);
+        //}
 
         protected void LoadData()
         {
@@ -116,7 +116,7 @@ namespace Kintai.Work
             //    dayList.Add(entity);
             //}
 
-            FixedMonthlyList(dayList, TargetMonthDate);
+            Utility.FixedMonthlyList(dayList, TargetMonthDate);
 
             int totalOfficeTime = 0;
             int totalWorkTime = 0;
@@ -155,22 +155,8 @@ namespace Kintai.Work
             TotalRestTime2.Text = Utility.MinutesToTimeString(totalRestTime);
             TotalOverTime2.Text = Utility.MinutesToTimeString(Math.Max(totalWorkTime - (8 * 60 * workDay), 0));
 
-#region 祝日抽出
-            SqlConnection conn;
-            conn = ThreadConnectionHolder.GetConnection();
-            HolidayInfoDao dao2 = new HolidayInfoDao(conn);
-            HolidayInfoEntity entity = new HolidayInfoEntity();
-            entity.Holiday1 = new DateTime(TargetMonthDate.Year, TargetMonthDate.Month, TargetMonthDate.Day);
-            DateTime TargetMonthEnd = TargetMonthDate.AddMonths(1).AddDays(-1);
-            entity.Holiday2 = new DateTime(TargetMonthEnd.Year, TargetMonthEnd.Month, TargetMonthEnd.Day);
-            List<HolidayInfoEntity> HolidayInRange = dao2.SelectRange(entity);
+            holidayMap = Utility.GetHoliday(TargetMonthDate);
 
-            foreach (var item in HolidayInRange)
-            {
-                holidayMap.Add(item.Holiday, item.HolidayName);
-            }
-            
-#endregion
             WorkTimeList = dayList;
 
             TargetMonthHead.Text = TargetMonthDate.ToString("yyyy年MM月");

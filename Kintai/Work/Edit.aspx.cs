@@ -16,6 +16,8 @@ namespace Kintai.Work
     {
         public DateTime TargetDate2 { get; set; }
 
+        protected Dictionary<DateTime, HolidayInfoEntity> holidayMap = new Dictionary<DateTime, HolidayInfoEntity>();
+
         protected DateTime GetTargetWorkDate()
         {
             string workDateStr = WorkDate.Value;
@@ -54,6 +56,8 @@ namespace Kintai.Work
             entity.UserId = user.ProviderUserKey.ToString();
             entity.WorkDate = workDate;
 
+            holidayMap = Utility.GetHoliday(workDate);
+
             if (!IsPostBack)
             {
                 WorkTimeDao dao = new WorkTimeDao();
@@ -70,6 +74,18 @@ namespace Kintai.Work
                     WorkTime.Text = Utility.MinutesToTimeString(oldentity.WorkTime);
 
                     EditFlag.Value = "1";
+                }
+
+                if (string.IsNullOrEmpty(EditFlag.Value) && oldentity == null)
+                {
+                    if (workDate.DayOfWeek == DayOfWeek.Saturday || workDate.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        WorkTypeDropDownList.SelectedIndex = 1;
+                    }
+                    else if (isHoliday(workDate) == 1)
+                    {
+                        WorkTypeDropDownList.SelectedIndex = 1;
+                    }
                 }
             }
         }
@@ -193,6 +209,11 @@ namespace Kintai.Work
 
             InfoMessage.Text = "メールを送信しました。";
 
+        }
+
+        protected int isHoliday(DateTime date)
+        {
+            return holidayMap.ContainsKey(date) ? 1 : 0;
         }
 
         protected void BeforeDay_Click(object sender, EventArgs e)

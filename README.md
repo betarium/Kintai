@@ -7,16 +7,16 @@
 * SQL Server 2008 Express
 
 ##環境構築
-* VisualStudioでリビルドする。
-* SQLフォルダのSQLファイルでデータベースを作成する。以下の順に実行する。
-** aspnetdb.sql
-** Kintai.sql
-** WorkTime.sql
-** HolidayInfo.sql
-* Configフォルダの設定ファイルをリネームする。
-** AppSettings.Sample.config → AppSettings.config
-** ConnectionStrings.Sample.config → ConnectionStrings.config
-* 設定ファイルのDB接続先とメール設定を修正する。
+1. VisualStudioでリビルドする。
+2. SQLフォルダのSQLファイルでデータベースを作成する。以下の順に実行する。
+* aspnetdb.sql
+* Kintai.sql
+* WorkTime.sql
+* HolidayInfo.sql
+3. Configフォルダの設定ファイルをリネームする。
+* AppSettings.Sample.config → AppSettings.config
+* ConnectionStrings.Sample.config → ConnectionStrings.config
+4. 設定ファイルのDB接続先とメール設定を修正する。
 
 ##ライセンス
     Copyright (c) 2015 betarium

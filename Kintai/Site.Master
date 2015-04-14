@@ -16,9 +16,11 @@
     <div class="page">
         <div class="header">
             <div class="title">
-                <h1>
-                    勤怠
-                </h1>
+                <a href="/" style="text-decoration: none">
+                    <h1>
+                        勤怠
+                    </h1>
+                </a>
             </div>
             <div class="loginDisplay">
                 <asp:LoginView ID="HeadLoginView" runat="server" EnableViewState="false">

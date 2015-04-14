@@ -8,6 +8,7 @@ using System.Web.Security;
 using OfficeOpenXml;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Data.SqlClient;
 
 namespace Kintai.Work
 {
@@ -33,39 +34,39 @@ namespace Kintai.Work
             TargetStartDay = monthDate;
         }
 
-        protected static void FixedMonthlyList(List<WorkTimeEntity> list, DateTime startDate)
-        {
-            Dictionary<string, WorkTimeEntity> dataMap = new Dictionary<string, WorkTimeEntity>();
-            foreach (var item in list)
-            {
-                string key = item.WorkDate.Value.ToString(Utility.DATE_FORMAT_YYYYMMDD);
-                if (dataMap.ContainsKey(key))
-                {
-                    continue;
-                }
-                dataMap.Add(key, item);
-            }
+        //protected static void FixedMonthlyList(List<WorkTimeEntity> list, DateTime startDate)
+        //{
+        //    Dictionary<string, WorkTimeEntity> dataMap = new Dictionary<string, WorkTimeEntity>();
+        //    foreach (var item in list)
+        //    {
+        //        string key = item.WorkDate.Value.ToString(Utility.DATE_FORMAT_YYYYMMDD);
+        //        if (dataMap.ContainsKey(key))
+        //        {
+        //            continue;
+        //        }
+        //        dataMap.Add(key, item);
+        //    }
 
-            List<WorkTimeEntity> dayList = new List<WorkTimeEntity>();
-            for (int day = 1; day <= 31; day++)
-            {
-                DateTime newday = startDate.AddDays(day - 1);
-                if (newday.Month != startDate.Month)
-                {
-                    break;
-                }
-                WorkTimeEntity entity = new WorkTimeEntity();
-                var newymd = newday.ToString(Utility.DATE_FORMAT_YYYYMMDD);
-                if (dataMap.ContainsKey(newymd))
-                {
-                    entity = dataMap[newymd];
-                }
-                entity.WorkDate = newday;
-                dayList.Add(entity);
-            }
-            list.Clear();
-            list.AddRange(dayList);
-        }
+        //    List<WorkTimeEntity> dayList = new List<WorkTimeEntity>();
+        //    for (int day = 1; day <= 31; day++)
+        //    {
+        //        DateTime newday = startDate.AddDays(day - 1);
+        //        if (newday.Month != startDate.Month)
+        //        {
+        //            break;
+        //        }
+        //        WorkTimeEntity entity = new WorkTimeEntity();
+        //        var newymd = newday.ToString(Utility.DATE_FORMAT_YYYYMMDD);
+        //        if (dataMap.ContainsKey(newymd))
+        //        {
+        //            entity = dataMap[newymd];
+        //        }
+        //        entity.WorkDate = newday;
+        //        dayList.Add(entity);
+        //    }
+        //    list.Clear();
+        //    list.AddRange(dayList);
+        //}
 
         protected void ReportButton_Click(object sender, EventArgs e)
         {
@@ -79,37 +80,10 @@ namespace Kintai.Work
             WorkTimeDao dao = new WorkTimeDao();
             dao.Connection = ThreadConnectionHolder.GetConnection();
             List<WorkTimeEntity> dayList = dao.SelectWhere("select * from " + WorkTimeDao.TABLE_NAME + " where UserId = @UserId and WorkDate >= @WorkDateBegin and WorkDate <= @WorkDateEnd order by WorkDate ", sqlparam);
-            //Dictionary<string, WorkTimeEntity> dataMap = new Dictionary<string, WorkTimeEntity>();
-            //foreach (var item in list)
-            //{
-            //    string key = item.WorkDate.Value.ToString(Utility.DATE_FORMAT_YYYYMMDD);
-            //    if (dataMap.ContainsKey(key))
-            //    {
-            //        continue;
-            //    }
-            //    dataMap.Add(key, item);
-            //}
 
-            //DateTime startDate = TargetStartDay;
-            //List<WorkTimeEntity> dayList = new List<WorkTimeEntity>();
-            //for (int day = 1; day <= 31; day++)
-            //{
-            //    DateTime newday = startDate.AddDays(day - 1);
-            //    if (newday.Month != startDate.Month)
-            //    {
-            //        break;
-            //    }
-            //    WorkTimeEntity entity = new WorkTimeEntity();
-            //    var newymd = newday.ToString(Utility.DATE_FORMAT_YYYYMMDD);
-            //    if (dataMap.ContainsKey(newymd))
-            //    {
-            //        entity = dataMap[newymd];
-            //    }
-            //    entity.WorkDate = newday;
-            //    dayList.Add(entity);
-            //}
+            Utility.FixedMonthlyList(dayList, TargetStartDay);
 
-            FixedMonthlyList(dayList, TargetStartDay);
+            Dictionary<DateTime, HolidayInfoEntity> holidayMap = Utility.GetHoliday(TargetStartDay);
 
             string fullName = (string)HttpContext.Current.Profile.GetPropertyValue("FullName");
 
@@ -135,6 +109,10 @@ namespace Kintai.Work
                     excel.Workbook.Worksheets[1].Cells[9 + index, 6].Value = null;
                     excel.Workbook.Worksheets[1].Cells[9 + index, 8].Value = null;
                     if (workDate.DayOfWeek == DayOfWeek.Sunday || workDate.DayOfWeek == DayOfWeek.Saturday)
+                    {
+                        excel.Workbook.Worksheets[1].Cells[9 + index, 4].Value = "休日";
+                    }
+                    else if (holidayMap.ContainsKey(workDate))
                     {
                         excel.Workbook.Worksheets[1].Cells[9 + index, 4].Value = "休日";
                     }
