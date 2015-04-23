@@ -16,6 +16,18 @@ namespace Kintai.Work
         public const string DATE_FORMAT_YYYYMM = "yyyy-MM";
         public const string DATE_FORMAT_YYYYMMDD = "yyyy-MM-dd";
 
+        public enum WorkType
+        {
+            Empty,
+            Normal,
+            Holiday,
+            PaidVacation,
+            HalfVacation,
+            WorkingHoliday,
+            PaidLeave,
+            NoDay
+        }
+
         public static void SendMail(string from, string to, string subject, string content)
         {
             string host = WebConfigurationManager.AppSettings["MailSmtpHost"];

@@ -34,40 +34,6 @@ namespace Kintai.Work
             TargetStartDay = monthDate;
         }
 
-        //protected static void FixedMonthlyList(List<WorkTimeEntity> list, DateTime startDate)
-        //{
-        //    Dictionary<string, WorkTimeEntity> dataMap = new Dictionary<string, WorkTimeEntity>();
-        //    foreach (var item in list)
-        //    {
-        //        string key = item.WorkDate.Value.ToString(Utility.DATE_FORMAT_YYYYMMDD);
-        //        if (dataMap.ContainsKey(key))
-        //        {
-        //            continue;
-        //        }
-        //        dataMap.Add(key, item);
-        //    }
-
-        //    List<WorkTimeEntity> dayList = new List<WorkTimeEntity>();
-        //    for (int day = 1; day <= 31; day++)
-        //    {
-        //        DateTime newday = startDate.AddDays(day - 1);
-        //        if (newday.Month != startDate.Month)
-        //        {
-        //            break;
-        //        }
-        //        WorkTimeEntity entity = new WorkTimeEntity();
-        //        var newymd = newday.ToString(Utility.DATE_FORMAT_YYYYMMDD);
-        //        if (dataMap.ContainsKey(newymd))
-        //        {
-        //            entity = dataMap[newymd];
-        //        }
-        //        entity.WorkDate = newday;
-        //        dayList.Add(entity);
-        //    }
-        //    list.Clear();
-        //    list.AddRange(dayList);
-        //}
-
         protected void ReportButton_Click(object sender, EventArgs e)
         {
             var user = Membership.GetUser();
@@ -93,15 +59,28 @@ namespace Kintai.Work
             excel.Workbook.Worksheets[1].Cells[1, 5].Value = TargetStartDay;
             excel.Workbook.Worksheets[1].Cells[2, 4].Value = fullName;
 
+            for (int index = 0; index < 31; index++)
+            {
+                excel.Workbook.Worksheets[1].Cells[9 + index, 4].Value = "なし";
+            }
+
             int workDay = 0;
+            int paidVac = 0;
             for (int index = 0; index < dayList.Count; index++)
             {
                 DateTime workDate = dayList[index].WorkDate.Value;
                 WorkTimeEntity entity = dayList[index];
-                if (workDate.DayOfWeek != DayOfWeek.Sunday && workDate.DayOfWeek != DayOfWeek.Saturday)
+                if (workDate.DayOfWeek != DayOfWeek.Sunday && workDate.DayOfWeek != DayOfWeek.Saturday && !holidayMap.ContainsKey(workDate))
                 {
                     workDay++;
                 }
+
+                if (entity.WorkType == (int)Utility.WorkType.PaidVacation)
+                {
+                    paidVac++;
+                }
+
+                excel.Workbook.Worksheets[1].Cells[9 + index, 4].Value = Utility.WorkTypeToString(entity.WorkType, true);
 
                 if (entity.BeginTime == null || entity.EndTime == null)
                 {
@@ -119,7 +98,7 @@ namespace Kintai.Work
                     continue;
                 }
 
-                excel.Workbook.Worksheets[1].Cells[9 + index, 4].Value = Utility.WorkTypeToString(entity.WorkType, true);
+                //excel.Workbook.Worksheets[1].Cells[9 + index, 4].Value = Utility.WorkTypeToString(entity.WorkType, true);
                 excel.Workbook.Worksheets[1].Cells[9 + index, 5].Value = Utility.MinutesToTimeString(entity.BeginTime);
                 excel.Workbook.Worksheets[1].Cells[9 + index, 6].Value = Utility.MinutesToTimeString(entity.EndTime);
                 excel.Workbook.Worksheets[1].Cells[9 + index, 5].Value = new TimeSpan(0, (int)(entity.BeginTime ?? 0), 0);
@@ -127,7 +106,8 @@ namespace Kintai.Work
                 excel.Workbook.Worksheets[1].Cells[9 + index, 8].Value = new TimeSpan(0, (int)(entity.RestTime ?? 0), 0);
             }
 
-            excel.Workbook.Worksheets[1].Cells[42, 5].Value = workDay;
+            excel.Workbook.Worksheets[1].Cells[42, 5].Value = workDay; //勤務日数
+            excel.Workbook.Worksheets[1].Cells[42, 9].Value = paidVac; //有給
 
             string destDir = Server.MapPath("/Export/");
             destDir = Path.Combine(destDir, TargetStartDay.ToString("yyyy年MM月"));

@@ -9,13 +9,13 @@
 ##環境構築
 1. VisualStudioでリビルドする。
 2. SQLフォルダのSQLファイルでデータベースを作成する。以下の順に実行する。
-* aspnetdb.sql
-* Kintai.sql
-* WorkTime.sql
-* HolidayInfo.sql
+ * aspnetdb.sql
+ * Kintai.sql
+ * WorkTime.sql
+ * HolidayInfo.sql
 3. Configフォルダの設定ファイルをリネームする。
-* AppSettings.Sample.config → AppSettings.config
-* ConnectionStrings.Sample.config → ConnectionStrings.config
+ * AppSettings.Sample.config → AppSettings.config
+ * ConnectionStrings.Sample.config → ConnectionStrings.config
 4. 設定ファイルのDB接続先とメール設定を修正する。
 
 ##ライセンス
