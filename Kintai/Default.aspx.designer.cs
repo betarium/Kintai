@@ -13,6 +13,15 @@ namespace Kintai {
     public partial class _Default {
         
         /// <summary>
+        /// TargetDate コントロール。
+        /// </summary>
+        /// <remarks>
+        /// 自動生成されたフィールド。
+        /// 変更するには、フィールドの宣言をデザイナー ファイルから分離コード ファイルに移動します。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label TargetDate;
+        
+        /// <summary>
         /// InputPanel コントロール。
         /// </summary>
         /// <remarks>
@@ -56,6 +65,15 @@ namespace Kintai {
         /// 変更するには、フィールドの宣言をデザイナー ファイルから分離コード ファイルに移動します。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button EndButton;
+        
+        /// <summary>
+        /// EditButton コントロール。
+        /// </summary>
+        /// <remarks>
+        /// 自動生成されたフィールド。
+        /// 変更するには、フィールドの宣言をデザイナー ファイルから分離コード ファイルに移動します。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button EditButton;
         
         /// <summary>
         /// HeadLoginView コントロール。
