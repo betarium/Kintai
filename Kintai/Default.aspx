@@ -8,6 +8,11 @@
         勤怠
     </h2>
     <div>
+        <asp:Panel ID="MessagePanel" runat="server">
+        <div style="background-color: Yellow; padding: 1em 1em 1em 1em; border: 3px solid silver">
+            <asp:Label ID="TopMessage" runat="server" />
+        </div>
+        </asp:Panel>
         <h3>
             <asp:Label ID="TargetDate" runat="server" />
         </h3>

@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Security;
 using Kintai.Work;
+using System.Web.Configuration;
 
 namespace Kintai
 {
@@ -34,6 +35,14 @@ namespace Kintai
                     BeginTime.Text = Utility.MinutesToTimeString(entity.BeginTime);
                     EndTime.Text = Utility.MinutesToTimeString(entity.EndTime);
                 }
+            }
+
+            MessagePanel.Visible = false;
+            string topMessage = WebConfigurationManager.AppSettings["TopMessage"];
+            if (!string.IsNullOrEmpty(topMessage))
+            {
+                TopMessage.Text = topMessage;
+                MessagePanel.Visible = true;
             }
 
         }
